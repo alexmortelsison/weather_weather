@@ -1,12 +1,52 @@
-import 'dart:ui';
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:weather_weather/components/additional_info_card.dart';
 import 'package:weather_weather/components/hourly_card.dart';
 import 'package:weather_weather/components/main_card.dart';
+import 'package:weather_weather/secrets.dart';
 
-class WeatherScreen extends StatelessWidget {
+class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
+
+  @override
+  State<WeatherScreen> createState() => _WeatherScreenState();
+}
+
+class _WeatherScreenState extends State<WeatherScreen> {
+  double temp = 0;
+
+  Future<void> getCurrentWeather() async {
+    const double lat = 34.7103;
+    const double lon = 137.7274;
+
+    final url = Uri.parse(
+      "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$APIKEY&units=metric",
+    );
+
+    try {
+      final res = await http.get(url);
+
+      if (res.statusCode != 200) {
+        throw Exception("HTTP error: ${res.statusCode}");
+      }
+
+      final data = jsonDecode(res.body);
+      setState(() {
+        temp = data["main"]["temp"];
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentWeather();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +71,10 @@ class WeatherScreen extends StatelessWidget {
           children: [
             SizedBox(
               width: double.infinity,
-              child: MainCard(),
+              child: MainCard(
+                temperature: "$temp",
+                weatherCondition: '',
+              ),
             ),
             SizedBox(height: 20),
             Text(
@@ -48,7 +91,7 @@ class WeatherScreen extends StatelessWidget {
                 children: [
                   HourlyCard(
                     icon: Icons.cloud,
-                    temperature: '24°C',
+                    temperature: "$temp",
                     time: '03:00',
                   ),
                   HourlyCard(

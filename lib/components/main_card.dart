@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MainCard extends StatelessWidget {
-  const MainCard({super.key});
+  final String temperature;
+  final String weatherCondition;
+  const MainCard({
+    super.key,
+    required this.temperature,
+    required this.weatherCondition,
+  });
 
   @override
   Widget build(BuildContext context) {
+    String temp = double.parse(temperature).round().toString();
     return Card(
       elevation: 5,
       shadowColor: Colors.blue.shade900,
@@ -13,7 +20,7 @@ class MainCard extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              "26°C",
+              "$temp°C",
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
@@ -23,7 +30,7 @@ class MainCard extends StatelessWidget {
             Icon(Icons.cloud, size: 64),
             SizedBox(height: 16),
             Text(
-              "Rain",
+              weatherCondition,
               style: TextStyle(fontSize: 20),
             ),
           ],
