@@ -16,9 +16,7 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  double temp = 0;
-
-  Future<void> getCurrentWeather() async {
+  Future<Map<String, dynamic>> getCurrentWeather() async {
     const double lat = 34.7103;
     const double lon = 137.7274;
 
@@ -34,18 +32,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
       }
 
       final data = jsonDecode(res.body);
-      setState(() {
-        temp = data["main"]["temp"];
-      });
+
+      data["main"]["temp"];
+      return data;
     } catch (e) {
       rethrow;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentWeather();
   }
 
   @override
@@ -64,90 +56,110 @@ class _WeatherScreenState extends State<WeatherScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: MainCard(
-                temperature: "$temp",
-                weatherCondition: '',
+      body: FutureBuilder(
+        future: getCurrentWeather(),
+        builder: (context, asyncSnapshot) {
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+          if (asyncSnapshot.hasError) {
+            return Center(
+              child: Text(
+                asyncSnapshot.error.toString(),
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Weather Forecast",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 2),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  HourlyCard(
-                    icon: Icons.cloud,
-                    temperature: "$temp",
-                    time: '03:00',
-                  ),
-                  HourlyCard(
-                    icon: Icons.sunny,
-                    temperature: '29°C',
-                    time: '03:00',
-                  ),
-                  HourlyCard(
-                    icon: Icons.air,
-                    temperature: '22°C',
-                    time: '03:00',
-                  ),
-                  HourlyCard(
-                    icon: Icons.cloud,
-                    temperature: '24°C',
-                    time: '03:00',
-                  ),
-                  HourlyCard(
-                    icon: Icons.cloud,
-                    temperature: '24°C',
-                    time: '03:00',
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Additional Information",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 2),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            );
+          }
+
+          final data = asyncSnapshot.data!;
+          final currentTemp = data["main"]["temp"];
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AdditionalInfoCard(
-                  icon: Icons.water_drop,
-                  text: "Humidity",
-                  result: "94",
+                SizedBox(
+                  width: double.infinity,
+                  child: MainCard(
+                    temperature: "$currentTemp",
+                    weatherCondition: '',
+                  ),
                 ),
-                AdditionalInfoCard(
-                  icon: Icons.air,
-                  text: "Wind Speed",
-                  result: "7.67",
+                SizedBox(height: 20),
+                Text(
+                  "Weather Forecast",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                AdditionalInfoCard(
-                  icon: Icons.beach_access,
-                  text: "Pressure",
-                  result: "1006",
+                SizedBox(height: 2),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      HourlyCard(
+                        icon: Icons.cloud,
+                        temperature: "24",
+                        time: '03:00',
+                      ),
+                      HourlyCard(
+                        icon: Icons.sunny,
+                        temperature: '29°C',
+                        time: '03:00',
+                      ),
+                      HourlyCard(
+                        icon: Icons.air,
+                        temperature: '22°C',
+                        time: '03:00',
+                      ),
+                      HourlyCard(
+                        icon: Icons.cloud,
+                        temperature: '24°C',
+                        time: '03:00',
+                      ),
+                      HourlyCard(
+                        icon: Icons.cloud,
+                        temperature: '24°C',
+                        time: '03:00',
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text(
+                  "Additional Information",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    AdditionalInfoCard(
+                      icon: Icons.water_drop,
+                      text: "Humidity",
+                      result: "94",
+                    ),
+                    AdditionalInfoCard(
+                      icon: Icons.air,
+                      text: "Wind Speed",
+                      result: "7.67",
+                    ),
+                    AdditionalInfoCard(
+                      icon: Icons.beach_access,
+                      text: "Pressure",
+                      result: "1006",
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
