@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import '../models/weather.dart';
-import '../secrets.dart'; // for APIKEY
+import '../secrets.dart';
 
 class WeatherService {
   final Location location = Location();
