@@ -43,6 +43,7 @@ class _WeatherPageState extends State<WeatherPage> {
                     cityName: weather.cityName,
                     weatherDescription: weather.description,
                     icon: WeatherIcons.cloudy,
+                    temperature: weather.temperature,
                   ),
                   const SizedBox(height: 64),
                   const Text("Hourly Forecast", style: TextStyle(fontSize: 20)),

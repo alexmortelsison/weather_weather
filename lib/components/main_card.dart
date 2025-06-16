@@ -4,11 +4,14 @@ class MainCard extends StatelessWidget {
   final String cityName;
   final IconData icon;
   final String weatherDescription;
+  final int temperature;
+
   const MainCard({
     super.key,
     required this.cityName,
     required this.weatherDescription,
     required this.icon,
+    required this.temperature,
   });
 
   @override
@@ -23,6 +26,11 @@ class MainCard extends StatelessWidget {
             children: [
               Text(
                 cityName,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 16),
+              Text(
+                "$temperature°C".toString(),
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
