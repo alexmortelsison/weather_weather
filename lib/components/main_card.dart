@@ -1,39 +1,42 @@
 import 'package:flutter/material.dart';
 
 class MainCard extends StatelessWidget {
-  final String temperature;
-  final String weatherCondition;
+  final String cityName;
+  final IconData icon;
+  final String weatherDescription;
   const MainCard({
     super.key,
-    required this.temperature,
-    required this.weatherCondition,
+    required this.cityName,
+    required this.weatherDescription,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
-    String temp = double.parse(temperature).round().toString();
     return Card(
-      elevation: 5,
-      shadowColor: Colors.blue.shade900,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              "$temp°C",
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
+      elevation: 3,
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Text(
+                cityName,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ),
-            SizedBox(height: 16),
-            Icon(Icons.cloud, size: 64),
-            SizedBox(height: 16),
-            Text(
-              weatherCondition,
-              style: TextStyle(fontSize: 20),
-            ),
-          ],
+              SizedBox(height: 16),
+              Icon(
+                icon,
+                size: 32,
+              ),
+              SizedBox(height: 16),
+              Text(
+                weatherDescription.toUpperCase(),
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
         ),
       ),
     );
