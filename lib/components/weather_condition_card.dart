@@ -13,14 +13,12 @@ class WeatherConditionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Icon(icon),
-          Text(title),
-          Text(weatherDescription),
-        ],
-      ),
+    return Column(
+      children: [
+        Icon(icon),
+        Text(title),
+        Text(weatherDescription),
+      ],
     );
   }
 }
