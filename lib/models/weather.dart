@@ -1,4 +1,3 @@
-// models/weather.dart
 class Weather {
   final String cityName;
   final String description;
@@ -16,11 +15,11 @@ class Weather {
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
-      cityName: json['name'],
-      description: json['weather'][0]['description'],
-      humidity: json['main']['humidity'],
-      windSpeed: (json['wind']['speed'] as num).toDouble(),
-      pressure: json['main']['pressure'],
+      cityName: json["name"],
+      description: json["weather"][0]["description"],
+      humidity: json["main"]["humidity"],
+      windSpeed: (json["wind"]["speed"] as num).toDouble(),
+      pressure: json["main"]["pressure"],
     );
   }
 }

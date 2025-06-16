@@ -1,33 +1,39 @@
 // services/weather_service.dart
 import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-import 'package:location/location.dart';
 import '../models/weather.dart';
 import '../secrets.dart';
 
 class WeatherService {
-  final Location location = Location();
-
   Future<Weather> fetchWeather() async {
-    bool serviceEnabled = await location.serviceEnabled();
+    // Check and request location permission
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        throw Exception('Location services are not enabled');
-      }
+      throw Exception('Location services are disabled.');
     }
 
-    PermissionStatus permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
         throw Exception('Location permissions are denied');
       }
     }
 
-    LocationData locationData = await location.getLocation();
-    final lat = locationData.latitude;
-    final lon = locationData.longitude;
+    if (permission == LocationPermission.deniedForever) {
+      throw Exception(
+        'Location permissions are permanently denied, we cannot request permissions.',
+      );
+    }
+
+    // Get current position
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    final lat = position.latitude;
+    final lon = position.longitude;
 
     final url = Uri.parse(
       "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$APIKEY&units=metric",
