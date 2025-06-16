@@ -1,4 +1,3 @@
-// services/weather_service.dart
 import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +6,6 @@ import '../secrets.dart';
 
 class WeatherService {
   Future<Weather> fetchWeather() async {
-    // Check and request location permission
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       throw Exception('Location services are disabled.');
@@ -27,7 +25,6 @@ class WeatherService {
       );
     }
 
-    // Get current position
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
