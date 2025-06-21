@@ -23,7 +23,12 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        title: Text("Weather-Weather"),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+      ),
       body: FutureBuilder(
         future: weatherFuture,
         builder: (context, snapshot) {
@@ -35,11 +40,15 @@ class _WeatherPageState extends State<WeatherPage> {
             final weather = snapshot.data!;
             return Column(
               children: [
-                MainCard(
-                  cityName: weather.cityName,
-                  weatherDescription: weather.description,
-                  icon: weather.icon,
-                  temperature: weather.temperature,
+                SizedBox(height: 200),
+                Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: MainCard(
+                    cityName: weather.cityName,
+                    weatherDescription: weather.description,
+                    icon: weather.icon,
+                    temperature: weather.temperature,
+                  ),
                 ),
               ],
             );
