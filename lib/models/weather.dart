@@ -1,59 +1,52 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:weather_icons/weather_icons.dart';
+import 'package:lottie/lottie.dart';
 
 class Weather {
   final String cityName;
-  final String description;
+  final String weatherDescription;
   final int temperature;
-  final int humidity;
   final int pressure;
+  final int humidity;
   final double windSpeed;
 
   Weather({
     required this.cityName,
-    required this.description,
+    required this.weatherDescription,
     required this.temperature,
-    required this.humidity,
     required this.pressure,
+    required this.humidity,
     required this.windSpeed,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
       cityName: json["name"],
-      description: json["weather"][0]["description"],
+      weatherDescription: json["weather"][0]["description"],
       temperature: (json["main"]["temp"] as num).round(),
-      humidity: json["main"]["humidity"],
       pressure: json["main"]["pressure"],
+      humidity: json["main"]["humidity"],
       windSpeed: (json["wind"]["speed"] as num).toDouble(),
     );
   }
 
   String get conditionKeyword {
-    final desc = description.toLowerCase();
+    final desc = weatherDescription.toLowerCase();
     if (desc.contains("cloud")) return "cloudy";
     if (desc.contains("rain")) return "rainy";
-    if (desc.contains("snow")) return "snowy";
     if (desc.contains("storm") || desc.contains("thunder")) return "stormy";
-    if (desc.contains("clear")) return "clear";
     return "default";
   }
 
-  IconData get icon {
+  String get weatherIconPath {
     switch (conditionKeyword) {
       case "cloudy":
-        return Icons.wb_cloudy_outlined;
+        return "assets/cloudy.json";
       case "rainy":
-        return WeatherIcons.rain_wind;
-      case "snowy":
-        return WeatherIcons.snow;
+        return "assets/rainy.json";
       case "stormy":
-        return WeatherIcons.day_storm_showers;
-      case "clear":
-        return WeatherIcons.day_cloudy_windy;
+        return "assets/thunderstorm.json";
       default:
-        return Icons.wb_sunny;
+        return "assets/sunny.json";
     }
   }
 }

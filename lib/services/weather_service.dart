@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:weather_weather/models/weather.dart';
-import 'package:http/http.dart' as http;
 import 'package:weather_weather/secrets.dart';
+import 'package:http/http.dart' as http;
 
 class WeatherService {
   Future<Weather> fetchWeather() async {
@@ -34,7 +34,7 @@ class WeatherService {
       final Map<String, dynamic> data = jsonDecode(response.body);
       return Weather.fromJson(data);
     } else {
-      throw Exception("Failed to fetch weather data");
+      throw Exception("Failed to fetch weather data.");
     }
   }
 }

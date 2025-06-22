@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_weather/components/main_card.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weather_weather/models/weather.dart';
 import 'package:weather_weather/services/weather_service.dart';
 
@@ -23,39 +23,52 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text("Weather-Weather"),
-        centerTitle: true,
         backgroundColor: Colors.transparent,
+        title: Text(
+          "Weather-Weather",
+          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
       ),
       body: FutureBuilder(
         future: weatherFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator.adaptive());
+            return Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
+            return Center(
+              child: Text("Error: ${snapshot.error}"),
+            );
           } else if (snapshot.hasData) {
-            final weather = snapshot.data!;
-            return Column(
-              children: [
-                SizedBox(height: 200),
-                Padding(
-                  padding: const EdgeInsets.all(25),
-                  child: MainCard(
-                    cityName: weather.cityName,
-                    weatherDescription: weather.description,
-                    icon: weather.icon,
-                    temperature: weather.temperature,
-                  ),
+            final weather = snapshot.data;
+            return SizedBox(
+              height: double.infinity,
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(height: 64),
+                    Text(
+                      weather!.cityName,
+                      style: TextStyle(fontSize: 28),
+                    ),
+                    Text(
+                      "${weather.temperature}°C",
+                      style: TextStyle(fontSize: 28),
+                    ),
+                    Lottie.asset(weather.weatherIconPath),
+                    Text(
+                      weather.weatherDescription.toUpperCase(),
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             );
           } else {
-            return Center(
-              child: Text("No data available."),
-            );
+            return Text("No data available");
           }
         },
       ),
