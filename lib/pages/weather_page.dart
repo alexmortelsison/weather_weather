@@ -23,6 +23,7 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
@@ -52,7 +53,10 @@ class _WeatherPageState extends State<WeatherPage> {
                     SizedBox(height: 64),
                     Text(
                       weather!.cityName,
-                      style: TextStyle(fontSize: 28),
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       "${weather.temperature}°C",
